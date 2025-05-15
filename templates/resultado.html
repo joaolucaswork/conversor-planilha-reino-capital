@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Resultados da Importação - Salesforce</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/resultado_success_fix.css') }}"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1><i class="fas fa-check-circle"></i> Resultados da Importação</h1>
+        <p>Resultado do processamento e envio para o Salesforce</p>
+        {% if user_info %}
+        <div class="user-info">
+          <div class="user-badge">
+            <i class="fas fa-user-circle"></i>
+            <span class="user-name">{{ user_info.name }}</span>
+            <span class="user-alias">({{ user_info.alias }})</span>
+          </div>
+        </div>
+        {% endif %}
+      </header>
+
+      <main>
+        <section class="result-section">
+          <div class="result-summary">
+            {% if result.success %}
+            <div class="result-icon success">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <h2>Processamento Concluído!</h2>
+            {% else %}
+            <div class="result-icon error">
+              <i class="fas fa-times-circle"></i>
+            </div>
+            <h2>Houve um problema!</h2>
+            {% endif %}
+
+            <p class="result-message">{{ result.message }}</p>
+
+            <div class="stats-container">
+              <div class="stat-box">
+                <span class="stat-number">{{ result.created_count }}</span>
+                <span class="stat-label">Leads Criados</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-number">{{ result.total_count }}</span>
+                <span class="stat-label">Total Processado</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-number"
+                  >{{ result.total_count - result.created_count }}</span
+                >
+                <span class="stat-label">Falhas</span>
+              </div>
+            </div>
+          </div>
+
+          {% if result.failed_leads and result.failed_leads|length > 0 %}
+          <div class="failed-leads-section">
+            <h3><i class="fas fa-exclamation-triangle"></i> Leads com Falha</h3>
+            <ul class="failed-leads-list">
+              {% for lead in result.failed_leads %}
+              <li>{{ lead }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+          {% endif %}
+
+          <div class="action-buttons">
+            <a href="{{ url_for('index') }}" class="button primary">
+              <i class="fas fa-home"></i> Voltar ao Início
+            </a>
+            {% if result.created_count > 0 %}
+            <a href="#" class="button secondary" onclick="window.print()">
+              <i class="fas fa-print"></i> Imprimir Resultados
+            </a>
+            {% endif %}
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        <p>&copy; 2025 Reino Capital | Conversor de Planilha para Salesforce</p>
+      </footer>
+    </div>
+    <script src="{{ url_for('static', filename='js/conversion_fix.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/resultado_fix.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/salesforce_result_fix.js') }}"></script>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/conversion_fix.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/resultado_fix.css') }}"
+    />
+  </body>
+</html>

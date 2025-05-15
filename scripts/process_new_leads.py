@@ -58,7 +58,7 @@ column_mapping = {
     'Tel. Fixo': 'Telefone Adicional',
     'Celular': 'Phone',
     'E-mail': 'Email',
-    'Descrição': 'Descrição do Lead',
+    # Removed Description field as it doesn't exist in Salesforce Lead object
     'Volume Aproximado': 'Patrimônio Financeiro',
     'Tipo': 'Tipo',
     'Estado': 'Estado/Província',
@@ -74,12 +74,8 @@ if 'Phone' in df.columns:
 if 'Telefone Adicional' in df.columns:
     df['Telefone Adicional'] = df['Telefone Adicional'].apply(clean_phone_number)
 
-# Process Description field - replace comma with semicolon
-print("Processing Description field...")
-if 'Descrição' in df.columns:
-    df['Descrição'] = df['Descrição'].str.replace(',', ';')
-elif 'Descrição do Lead' in df.columns:
-    df['Descrição do Lead'] = df['Descrição do Lead'].str.replace(',', ';')
+# Note: Description field is not available in Lead object, so we will skip processing it
+print("Note: Description field is not being used (not available in Lead object)")
 
 # Convert money values to numeric if needed
 print("Converting money values...")
@@ -93,7 +89,7 @@ elif 'Lead tem mais de R$1M?' not in df.columns:
     df['Lead tem mais de R$1M?'] = 1
 
 # Make sure we have all required columns
-required_columns = ['Last Name', 'Telefone Adicional', 'Phone', 'Email', 'Descrição do Lead', 
+required_columns = ['Last Name', 'Telefone Adicional', 'Phone', 'Email', 
                     'Patrimônio Financeiro', 'Tipo', 'Estado/Província', 'OwnerId', 'Lead tem mais de R$1M?']
 
 for col in required_columns:
@@ -104,12 +100,17 @@ for col in required_columns:
 # Save the result to the target file format
 print("Saving processed file...")
 # Remove original columns that have been transformed
-for col in ['Volume Aproximado', 'Milhao', 'Cliente', 'Tel. Fixo', 'Celular', 'E-mail', 'Descrição', 'Estado']:
+for col in ['Volume Aproximado', 'Milhao', 'Cliente', 'Tel. Fixo', 'Celular', 'E-mail', 'Estado']:
+    if col in df.columns:
+        df = df.drop(columns=[col])
+
+# Ensure no Description-related fields are passed to Salesforce
+for col in ['Descrição', 'Descrição do Lead', 'Description']:
     if col in df.columns:
         df = df.drop(columns=[col])
 
 # Reorder columns to match the target format
-column_order = ['Last Name', 'Telefone Adicional', 'Phone', 'Email', 'Descrição do Lead', 
+column_order = ['Last Name', 'Telefone Adicional', 'Phone', 'Email',
                 'Patrimônio Financeiro', 'Tipo', 'Estado/Província', 'OwnerId', 'Lead tem mais de R$1M?']
 
 # Make sure all columns exist before reordering

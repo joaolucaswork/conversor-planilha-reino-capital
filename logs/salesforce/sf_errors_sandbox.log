@@ -1,0 +1,12 @@
+2025-05-15 16:46:59 [ERROR] [salesforce_api] - [environment=SANDBOX | timestamp=2025-05-15T16:46:59.846551 | caller=salesforce_api] Erro ao processar leads em massa: invalid literal for int() with base 10: '"true"'
+Traceback (most recent call last):
+  File "C:\Users\joaol\Desktop\conversor_planilha\src\services\salesforce_api.py", line 622, in create_bulk_leads_in_salesforce
+    'index': int(parts[1])
+             ~~~^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: '"true"'
+2025-05-15 16:51:33 [ERROR] [salesforce_api] - [environment=SANDBOX | timestamp=2025-05-15T16:51:33.509185 | caller=salesforce_api] Erro ao processar leads em massa: invalid literal for int() with base 10: '"true"'
+Traceback (most recent call last):
+  File "C:\Users\joaol\Desktop\conversor_planilha\src\services\salesforce_api.py", line 622, in create_bulk_leads_in_salesforce
+    'index': int(parts[1])
+             ~~~^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: '"true"'

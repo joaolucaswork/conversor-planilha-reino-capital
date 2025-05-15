@@ -1,2 +1,70 @@
+# Ambiente e configurações
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Arquivos de dados sensíveis
 leads-semformatado.csv
 Novos_Leads_Sales.csv
+*.csv
+!requirements.txt
+
+# Diretório de uploads e arquivos temporários
+A converter/*
+!A converter/.gitkeep
+!A converter/temp/
+A converter/temp/*
+!A converter/temp/.gitkeep
+temp_*
+**/temp_*
+
+# Arquivos de cache Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Ambiente virtual
+venv/
+env/
+ENV/
+.venv/
+.env/
+env.bak/
+venv.bak/
+
+# Logs
+logs/*
+!logs/.gitkeep
+!logs/conversion/
+!logs/salesforce/
+logs/conversion/*
+logs/salesforce/*
+!logs/conversion/.gitkeep
+!logs/salesforce/.gitkeep
+*.log
+
+# Arquivos específicos do sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDEs e editores
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.settings/
+
+# Arquivos de build e distribuição
+build/
+dist/
+*.egg-info/

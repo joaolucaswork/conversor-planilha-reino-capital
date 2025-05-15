@@ -2,17 +2,44 @@
 
 ## Descrição
 
-Esta ferramenta converte arquivos CSV com leads não formatados para o formato compatível com importação no Salesforce. O conversor aplica regras de transformação para garantir que os dados sejam corretamente mapeados para os campos adequados no Salesforce.
+Esta aplicação web permite converter e enviar arquivos CSV com leads diretamente para o Salesforce. O conversor aplica regras de transformação para garantir que os dados sejam corretamente mapeados para os campos adequados no Salesforce e depois realiza a integração automática.
 
 ## Estrutura do Projeto
 
 - `A converter/`: Pasta contendo arquivos CSV a serem convertidos
-  - `leads-semformatado.csv`: Arquivo de exemplo com dados de leads não formatados
-- `scripts/`: Scripts Python para processar os arquivos
-  - `format_name_email.py`: Script para formatar nomes e emails
-  - `process_new_leads.py`: Script principal para processamento de leads
+  - `leads-semformatado.csv`: Arquivo temporário para o upload do usuário
+- `scripts/`: Scripts Python originais para processamento offline
+- `src/`: Módulos principais da aplicação web
+  - `services/`: Serviços de integração com Salesforce
+  - `utils/`: Utilitários e configurações
+- `static/`: Arquivos estáticos para a interface web
+  - `css/`: Estilos CSS
+  - `js/`: Scripts JavaScript
+- `templates/`: Templates HTML da aplicação
+- `logs/`: Logs de operação e diagnóstico
 
 ## Como Usar 
+
+### Modo Web (Recomendado)
+
+1. Configure as credenciais do Salesforce (copie `.env.example` para `.env` e preencha)
+2. Instale as dependências:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. Execute a aplicação web:
+
+   ```bash
+   python app.py
+   ```
+
+4. Acesse a aplicação em seu navegador: [http://localhost:5000](http://localhost:5000)
+5. Faça upload do arquivo CSV e envie para processamento
+### Modo Script (Legacy)
+
+Ainda é possível usar os scripts originais:
 
 1. Coloque os arquivos CSV a serem convertidos na pasta `A converter/`
 2. Execute o script de processamento:
@@ -21,7 +48,7 @@ Esta ferramenta converte arquivos CSV com leads não formatados para o formato c
    python scripts/process_new_leads.py
    ```
 
-3. O arquivo convertido será salvo com os dados formatados prontos para importação no Salesforce
+3. O arquivo convertido será salvo para uso posterior
 
 ## Regras de Transformação
 

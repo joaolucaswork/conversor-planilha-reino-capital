@@ -1,0 +1,59 @@
+/* Estilos adicionais para a página de resultados */
+
+/* Garantir que a seção de resultados seja sempre visível */
+.result-visible {
+  display: block !important;
+  opacity: 1 !important;
+}
+
+/* Adicionar animação ao ícone de sucesso */
+.result-icon.success.animated {
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.4);
+  }
+  70% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 10px rgba(40, 167, 69, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(40, 167, 69, 0);
+  }
+}
+
+/* Melhorar a visibilidade dos resultados */
+.result-message {
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin: 20px 0;
+  padding: 15px;
+  border-radius: 5px;
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+/* Destacar números nos resultados */
+.stat-number {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+/* Melhorar a visualização de falhas */
+.failed-leads-list {
+  max-height: 300px;
+  overflow-y: auto;
+  background-color: rgba(255, 0, 0, 0.03);
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.failed-leads-list li {
+  margin-bottom: 10px;
+  padding: 5px;
+  border-bottom: 1px solid #eee;
+}

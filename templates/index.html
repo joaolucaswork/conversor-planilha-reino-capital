@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Conversor de Planilha para Salesforce</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/main.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        {% if user_info %}
+        <div class="user-info">
+          <i class="fas fa-user-circle"></i>
+          <span class="user-name">{{ user_info.name }}</span>
+          <div
+            class="environment-badge {{ session.get('environment', 'sandbox') }}"
+          >
+            {{ session.get('environment', 'sandbox').upper() }}
+          </div>
+        </div>
+        {% else %}
+        <div class="connection-status">
+          <i class="fas fa-exclamation-triangle"></i>
+          <span>Não conectado ao Salesforce</span>
+          <p>
+            Selecione um ambiente e faça upload de um arquivo para conectar.
+          </p>
+        </div>
+        {% endif %}
+      </header>
+
+      <main>
+        {% with messages = get_flashed_messages(with_categories=true) %} {% if
+        messages %}
+        <div class="flash-messages">
+          {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">
+            {{ message }}
+            <span
+              class="close-btn"
+              onclick="this.parentElement.style.display='none';"
+              >&times;</span
+            >
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %} {% endwith %}
+
+        <section class="upload-section">
+          <div class="card">
+            <h2>Envie qualquer arquivo</h2>
+            <form
+              action="{{ url_for('upload_file') }}"
+              method="post"
+              enctype="multipart/form-data"
+              id="upload-form"
+            >
+              <div class="file-upload-area">
+                <i class="fas fa-file-upload"></i>
+                <label for="file-upload">Selecione um arquivo</label>
+                <input
+                  type="file"
+                  id="file-upload"
+                  name="file"
+                  accept=".csv,.xlsx,.xls"
+                />
+              </div>
+
+              <div class="environment-selection">
+                <div class="radio-group">
+                  <label>
+                    <input type="radio" id="sandbox" name="environment"
+                    value="sandbox" {% if session.get('environment', 'sandbox')
+                    == 'sandbox' %}checked{% endif %}> Sandbox
+                  </label>
+                  <label>
+                    <input type="radio" id="production" name="environment"
+                    value="production" {% if session.get('environment') ==
+                    'production' %}checked{% endif %}> Produção
+                  </label>
+                </div>
+              </div>
+
+              <div class="alias-selection">
+                <label class="section-label">Atribuição de leads:</label>
+                <select id="lead-owner" name="lead_owner" class="select-field">
+                  <option value="auto" selected>
+                    Automática (Regras do Salesforce)
+                  </option>
+                  <option value="custom">ID personalizado</option>
+                </select>
+                <div
+                  id="custom-owner-id"
+                  class="custom-field"
+                  style="display: none"
+                >
+                  <input
+                    type="text"
+                    name="custom_owner_id"
+                    placeholder="ID do usuário ou fila no Salesforce"
+                    class="text-field"
+                  />
+                  <p class="help-text">
+                    Insira um ID válido de 15 ou 18 caracteres começando com
+                    '00'
+                  </p>
+                </div>
+              </div>
+
+              <button type="submit" class="btn" id="upload-button">
+                <i class="fas fa-upload"></i> Enviar
+              </button>
+            </form>
+          </div>
+        </section>
+
+        <!-- Área de conversão de arquivo -->
+        <section
+          class="conversion-section"
+          id="conversion-section"
+          style="display: none"
+        >
+          <div class="card">
+            <h2>Processando arquivo</h2>
+            <div class="upload-progress">
+              <div class="progress-ring-container">
+                <svg class="progress-ring" width="120" height="120">
+                  <circle
+                    class="progress-ring-circle"
+                    stroke="#0088FF"
+                    stroke-width="8"
+                    fill="transparent"
+                    r="52"
+                    cx="60"
+                    cy="60"
+                  />
+                </svg>
+                <span class="progress-percentage">0%</span>
+              </div>
+              <p class="progress-text">Processando...</p>
+              <button type="button" class="btn cancel-button">Cancelar</button>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        <p>&copy; 2025 Reino Capital | Enviar Leads para o Salesforce</p>
+      </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/conversion_fix.js') }}"></script>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/conversion_fix.css') }}"
+    />
+  </body>
+</html>
