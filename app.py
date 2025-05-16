@@ -12,6 +12,7 @@ from src.services.salesforce_user import get_current_user_info
 from src.utils.salesforce_logger import get_salesforce_logger
 from src.utils.conversion_logger import get_conversion_logger
 from src.utils.csv_helper import fix_salesforce_lead_csv
+from src.utils.txt_helper import process_txt_file
 from llm import get_ai_completion, get_column_mapping_from_ai 
 
 app = Flask(__name__)
@@ -51,7 +52,7 @@ def method_not_allowed(error):
 
 # Configurações
 UPLOAD_FOLDER = os.path.join(os.getcwd(), 'A converter')
-ALLOWED_EXTENSIONS = {'csv', 'xlsx', 'xls'}
+ALLOWED_EXTENSIONS = {'csv', 'xlsx', 'xls', 'txt'}
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # Limita o tamanho do upload para 16MB

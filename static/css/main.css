@@ -335,11 +335,11 @@ footer {
   .container {
     padding: 10px;
   }
-  
+
   .card {
     padding: 15px;
   }
-  
+
   .radio-group {
     flex-direction: column;
     gap: 10px;

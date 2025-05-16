@@ -23,11 +23,15 @@ def get_openai_client():
         )
     return client_instance
 
-def get_ai_completion(prompt_text: str):
+def get_ai_completion(prompt_text: str, model=None, temperature=None, max_tokens=None, json_mode=False):
     """Interacts with the OpenRouter API to get a completion.
 
     Args:
         prompt_text (str): The text prompt for the AI.
+        model (str, optional): AI model to use. Defaults to gemini-2.0-flash-001 or similar.
+        temperature (float, optional): Controls randomness. Lower is more deterministic. Defaults to 0.1.
+        max_tokens (int, optional): Maximum tokens in the response. Defaults to 4096.
+        json_mode (bool, optional): Whether to enforce JSON format in response. Defaults to False.
 
     Returns:
         str: The content of the AI's response, or None if an error occurs.
@@ -49,17 +53,43 @@ def get_ai_completion(prompt_text: str):
             ]
         }
     ]
+    
+    # Default values for more robust extraction
+    if model is None:
+        model = "google/gemini-2.0-flash-001"  # Current available model for text extraction
+    
+    if temperature is None:
+        temperature = 0.05  # Extremamente determinístico para extração de dados precisa
+        
+    if max_tokens is None:
+        max_tokens = 4096  # Aumentado para capturar todo contexto necessário
+    
+    # If JSON mode is requested, add system prompt to enforce JSON formatting
+    if json_mode:
+        messages.insert(0, {
+            "role": "system",
+            "content": "Você é um assistente AVANÇADO de extração de dados que extrai TODOS os dados possíveis do texto fornecido, mesmo de textos mal formatados ou não estruturados. Você deve extrair QUALQUER informação útil, mesmo que pareça insignificante. Sua resposta DEVE ser EXCLUSIVAMENTE em formato JSON válido, sem explicações ou textos adicionais. Sua capacidade de extrair o máximo de informação possível é CRUCIAL."
+        })
 
     try:
-        completion = client.chat.completions.create(
-            extra_headers={
-                "HTTP-Referer": "https://openrouter.ai/", # Optional. Site URL for rankings on openrouter.ai.
-                "X-Title": "openrouter.ai", # Optional. Site title for rankings on openrouter.ai.
+        completion_params = {
+            "extra_headers": {
+                "HTTP-Referer": "https://openrouter.ai/",
+                "X-Title": "openrouter.ai",
             },
-            extra_body={},
-            model="google/gemini-2.0-flash-001", # You might want to make this configurable
-            messages=messages
-        )
+            "extra_body": {},
+            "model": model,
+            "messages": messages,
+            "temperature": temperature,
+            "max_tokens": max_tokens
+        }
+        
+        # Add response format if we want JSON
+        if json_mode:
+            completion_params["response_format"] = {"type": "json_object"}
+            
+        completion = client.chat.completions.create(**completion_params)
+        
         return completion.choices[0].message.content
     except Exception as e:
         print(f"An error occurred during API call: {e}")
@@ -107,15 +137,15 @@ def get_column_mapping_from_ai(file_snippet: str, target_salesforce_schema: dict
     try:
         client = get_openai_client()
         response = client.chat.completions.create(
-            model="google/gemini-2.0-flash-001", # Or another capable model like gpt-4o-mini
-            response_format={"type": "json_object"}, # CRUCIAL for getting JSON
+            model="google/gemini-2.0-flash-001", # Modelo disponível atualmente
+            response_format={"type": "json_object"}, # CRUCIAL para obter JSON
             messages=[
-                # System prompt to reinforce JSON output, though response_format is stronger
+                # System prompt para reforçar saída JSON
                 {"role": "system", "content": "You are an AI assistant that strictly outputs a single, valid JSON object mapping columns according to the user's instructions. Do not include any explanatory text before or after the JSON object."},
                 {"role": "user", "content": prompt}
             ],
-            temperature=0.05, # Low temperature for more deterministic mapping
-            max_tokens=1024 # Adjust as needed, depends on schema size and snippet size
+            temperature=0.15, # Balanceando determinismo com flexibilidade
+            max_tokens=1024 # Ajustar conforme necessário, depende do tamanho do esquema e do snippet
         )
         
         raw_json_response = response.choices[0].message.content

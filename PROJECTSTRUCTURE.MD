@@ -2,7 +2,7 @@
 
 ## 1. Application Overview
 
-The Conversor de Planilha para Salesforce is a Flask-based web application that transforms CSV and Excel files into leads in Salesforce. The application handles file uploads, data transformation, and direct integration with Salesforce's API to create leads with proper mapping and validation.
+The Conversor de Planilha para Salesforce is a Flask-based web application that transforms CSV, Excel and TXT files into leads in Salesforce. The application handles file uploads, data transformation, and direct integration with Salesforce's API to create leads with proper mapping and validation.
 
 ## 2. System Architecture
 

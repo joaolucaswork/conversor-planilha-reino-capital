@@ -1,0 +1,138 @@
+/* Estilos específicos para formatação melhorada de erros */
+
+.formatted-error-item {
+  margin: 15px 0;
+  padding: 15px;
+  background-color: #fff5f5;
+  border-left: 4px solid #e53e3e;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.formatted-leads-errors {
+  margin-top: 10px;
+  padding-left: 20px;
+  list-style-type: none;
+}
+
+.formatted-leads-errors li {
+  margin-bottom: 12px;
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid rgba(231, 76, 60, 0.15);
+  padding-bottom: 8px;
+}
+
+.formatted-leads-errors li:last-child {
+  border-bottom: none;
+}
+
+.lead-name {
+  font-weight: 600;
+  color: #2d3748;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.lead-email {
+  font-weight: normal;
+  font-style: italic;
+  color: #4a5568;
+}
+
+.lead-errors {
+  margin-top: 8px;
+  padding-left: 18px;
+  list-style-type: disc;
+}
+
+.lead-errors li {
+  margin: 3px 0;
+  padding: 4px 8px;
+  background-color: #fffaf0;
+  border-left: 2px solid #f6ad55;
+  box-shadow: none;
+  font-size: 0.9em;
+  color: #744210;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+/* Novos estilos para formatação de texto simples */
+.plain-text-error {
+  padding: 8px;
+}
+
+.error-title {
+  font-weight: bold;
+  margin-bottom: 6px;
+  color: #e53e3e;
+}
+
+.plain-text-error ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.plain-text-error li {
+  margin: 4px 0;
+  color: #4a5568;
+}
+
+.generic-error {
+  color: #e53e3e;
+  font-style: italic;
+  margin-top: 5px;
+  font-size: 0.9em;
+}
+
+/* Correções de espaçamento para a exibição de falhas */
+.failed-leads-section {
+  margin-top: 20px;
+}
+
+.failed-leads-list {
+  padding-left: 0;
+}
+
+.failed-leads-list > li {
+  padding: 8px 12px;
+}
+
+/* Adicionar realce quando houver resposta duplicada do SF */
+.duplicate-error {
+  border-left: 3px solid #e67e22;
+  background-color: rgba(230, 126, 34, 0.05);
+}
+
+/* Animação suave para facilitar a visualização de mudanças */
+.formatted-error-item,
+.plain-text-error-item {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Estilos responsivos para telas menores */
+@media (max-width: 768px) {
+  .formatted-error-item {
+    padding: 10px;
+  }
+
+  .formatted-leads-errors {
+    padding-left: 15px;
+  }
+
+  .lead-errors {
+    padding-left: 15px;
+  }
+}

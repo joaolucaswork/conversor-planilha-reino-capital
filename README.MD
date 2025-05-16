@@ -18,7 +18,7 @@ Esta aplicação web permite converter e enviar arquivos CSV com leads diretamen
 - `templates/`: Templates HTML da aplicação
 - `logs/`: Logs de operação e diagnóstico
 
-## Como Usar 
+## Como Usar
 
 ### Modo Web (Recomendado)
 
@@ -37,6 +37,7 @@ Esta aplicação web permite converter e enviar arquivos CSV com leads diretamen
 
 4. Acesse a aplicação em seu navegador: [http://localhost:5000](http://localhost:5000)
 5. Faça upload do arquivo CSV e envie para processamento
+
 ### Modo Script (Legacy)
 
 Ainda é possível usar os scripts originais:

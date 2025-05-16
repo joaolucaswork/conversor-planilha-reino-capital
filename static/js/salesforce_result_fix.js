@@ -35,32 +35,50 @@ function verifySuccessStatus() {
   console.log(
     `Estatísticas detectadas - Criados: ${createdLeads}, Total: ${totalProcessed}, Falhas: ${failedLeads}`
   );
-
   // Verifica inconsistências nos dados mostrados
   const hasProcessedItems = totalProcessed > 0;
   const hasSuccessfulLeads = createdLeads > 0;
+  const hasFailedLeads = failedLeads > 0;
 
   // Elementos visuais
   const resultIcon = document.querySelector(".result-icon");
   const resultTitle = document.querySelector(".result-section h2");
   const resultMessage = document.querySelector(".result-message");
+  const failedLeadsSection = document.querySelector(".failed-leads-section");
 
-  // Se processou itens, mas está mostrando erro, corrige
-  if (hasProcessedItems) {
+  // Se processou itens (com sucesso ou falha), verificamos se a exibição está correta
+  if (hasProcessedItems || hasFailedLeads) {
     console.log("Processamento detectado, verificando estado visual...");
 
-    // Força o título e ícone para sucesso se o HTML ainda está mostrando erro
-    if (resultTitle && resultTitle.textContent.includes("problema")) {
-      console.log("Corrigindo título para indicar sucesso");
-      resultTitle.textContent = "Processamento Concluído!";
-    }
+    // Corrige estatísticas se necessário
+    if (failedLeads > 0 && !hasSuccessfulLeads) {
+      // Se temos falhas mas nenhum sucesso, mostramos o ícone de erro
+      if (resultIcon && resultIcon.classList.contains("success")) {
+        console.log("Corrigindo ícone para erro (todos falharam)");
+        resultIcon.classList.remove("success");
+        resultIcon.classList.add("error");
+        resultIcon.innerHTML = '<i class="fas fa-times-circle"></i>';
+      }
 
-    // Corrige o ícone se necessário
-    if (resultIcon && resultIcon.classList.contains("error")) {
-      console.log("Corrigindo ícone para sucesso");
-      resultIcon.classList.remove("error");
-      resultIcon.classList.add("success");
-      resultIcon.innerHTML = '<i class="fas fa-check-circle"></i>';
+      // Atualiza o título para indicar problema
+      if (resultTitle && !resultTitle.textContent.includes("problema")) {
+        console.log("Corrigindo título para indicar problema");
+        resultTitle.textContent = "Houve um problema!";
+      }
+    } else if (hasSuccessfulLeads) {
+      // Força o título e ícone para sucesso se temos leads criados com sucesso
+      if (resultTitle && resultTitle.textContent.includes("problema")) {
+        console.log("Corrigindo título para indicar sucesso");
+        resultTitle.textContent = "Processamento Concluído!";
+      }
+
+      // Corrige o ícone se necessário
+      if (resultIcon && resultIcon.classList.contains("error")) {
+        console.log("Corrigindo ícone para sucesso");
+        resultIcon.classList.remove("error");
+        resultIcon.classList.add("success");
+        resultIcon.innerHTML = '<i class="fas fa-check-circle"></i>';
+      }
     }
 
     // Garante que a mensagem de resultado esteja visível

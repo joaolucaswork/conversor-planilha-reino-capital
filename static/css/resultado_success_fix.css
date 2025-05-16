@@ -50,6 +50,58 @@
 
 /* Estilo para seção de falhas quando existem */
 .failed-leads-section {
+  background-color: rgba(231, 76, 60, 0.1);
+  border-radius: 8px;
+  padding: 15px 20px;
+  margin: 20px 0;
+  border-left: 5px solid #e74c3c;
+}
+
+.failed-leads-section h3 {
+  color: #c0392b;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+}
+
+.failed-leads-section h3 i {
+  margin-right: 10px;
+}
+
+.failed-leads-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.failed-leads-list li {
+  padding: 10px;
+  border-bottom: 1px solid rgba(231, 76, 60, 0.3);
+  color: #555;
+  font-size: 14px;
+}
+
+.failed-leads-list li:last-child {
+  border-bottom: none;
+}
+
+/* Ajustes específicos para mensagens de falha */
+.result-section .result-message.error {
+  border-left-color: #e74c3c;
+}
+
+/* Ajustes para estatísticas específicas */
+.stat-box:last-child .stat-number {
+  color: #e74c3c;
+}
+
+/* Força visibilidade da seção de falhas */
+.failed-leads-section {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+.failed-leads-section {
   margin-top: 20px;
   padding: 15px;
   border-radius: 5px;

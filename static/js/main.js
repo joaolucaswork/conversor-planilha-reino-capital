@@ -39,10 +39,10 @@ document.addEventListener("DOMContentLoaded", function () {
       const fileName = fileInput.files[0].name;
       const fileExt = fileName.split(".").pop().toLowerCase();
 
-      if (!["csv", "xlsx", "xls"].includes(fileExt)) {
+      if (!["csv", "xlsx", "xls", "txt"].includes(fileExt)) {
         event.preventDefault();
         alert(
-          "Por favor, selecione um arquivo com extensão .csv, .xlsx ou .xls"
+          "Por favor, selecione um arquivo com extensão .csv, .xlsx, .xls ou .txt"
         );
         return false;
       }
@@ -53,8 +53,8 @@ document.addEventListener("DOMContentLoaded", function () {
         '<i class="fas fa-spinner fa-spin"></i> Enviando arquivo...';
       uploadBtn.disabled = true;
 
-      // Show conversion section for Excel files
-      if (["xlsx", "xls"].includes(fileExt)) {
+      // Show conversion section for Excel files and TXT files
+      if (["xlsx", "xls", "txt"].includes(fileExt)) {
         // Show the conversion section
         conversionSection.style.display = "block";
 

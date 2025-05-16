@@ -29,9 +29,109 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Detecta se existem estatísticas para verificar sucesso
       const statsNumber = document.querySelectorAll(".stat-number");
-      if (statsNumber && statsNumber.length >= 1) {
-        const leadCount = parseInt(statsNumber[0].textContent);
-        if (leadCount > 0) {
+      if (statsNumber && statsNumber.length >= 3) {
+        let leadCount = parseInt(statsNumber[0].textContent) || 0;
+        let totalCount = parseInt(statsNumber[1].textContent) || 0;
+        let failCount = parseInt(statsNumber[2].textContent) || 0;
+
+        console.log(
+          `Stats detectadas - Leads: ${leadCount}, Total: ${totalCount}, Falhas: ${failCount}`
+        );
+
+        // Verificar se há falhas na lista mas contagem zerada
+        const failedSection = document.querySelector(".failed-leads-section");
+
+        if (failedSection) {
+          // Contamos manualmente os itens de falha
+          const failItems = failedSection.querySelectorAll(
+            ".failed-leads-list li"
+          );
+          const manualFailCount = failItems.length;
+
+          console.log(`Contagem manual de falhas: ${manualFailCount}`);
+
+          // Se há falhas visíveis mas os números estão errados, corrigimos
+          if (
+            manualFailCount > 0 &&
+            (failCount === 0 || failCount !== manualFailCount)
+          ) {
+            console.log(
+              `Detectados ${manualFailCount} itens de falha, mas contador é ${failCount}. Corrigindo...`
+            );
+
+            // Se o totalCount for zero ou menor que o número de falhas, atualizamos
+            if (totalCount === 0 || totalCount < manualFailCount) {
+              totalCount = manualFailCount;
+              console.log(`Total count atualizado para ${totalCount}`);
+            }
+
+            // Atualizar o número de falhas
+            failCount = manualFailCount;
+            console.log(`Fail count atualizado para ${failCount}`);
+
+            // Se o leadCount + failCount não bate com o total, ajustamos
+            if (leadCount + failCount !== totalCount) {
+              if (leadCount > 0) {
+                // Se já tem leads criados, ajusta o total
+                totalCount = leadCount + failCount;
+                console.log(`Total count recalculado: ${totalCount}`);
+              } else {
+                // Se não tem leads criados, assume que nenhum foi criado
+                leadCount = 0;
+                console.log(`Lead count definido como zero`);
+              }
+            }
+
+            // Atualizar os elementos da interface
+            if (statsNumber[0]) statsNumber[0].textContent = leadCount;
+            if (statsNumber[1]) statsNumber[1].textContent = totalCount;
+            if (statsNumber[2]) statsNumber[2].textContent = failCount;
+          }
+
+          // Garante que a seção de falhas esteja visível se houver falhas
+          if (manualFailCount > 0 || failCount > 0) {
+            failedSection.style.display = "block";
+          }
+        }
+
+        // Verifica se temos situação de falha total (todos falharam)
+        if (leadCount === 0 && (failCount > 0 || totalCount > 0)) {
+          console.log(
+            "Detectado caso de falha total - todos os leads falharam"
+          );
+
+          // Se estamos mostrando como sucesso, corrige para erro
+          const successIcon = document.querySelector(".result-icon.success");
+          if (successIcon) {
+            console.log("Corrigindo ícone de sucesso para erro");
+            successIcon.classList.remove("success");
+            successIcon.classList.add("error");
+            successIcon.innerHTML = '<i class="fas fa-times-circle"></i>';
+
+            // Também atualiza o título para erro
+            const titleElement = successIcon.nextElementSibling;
+            if (titleElement && titleElement.tagName === "H2") {
+              titleElement.textContent = "Houve um problema!";
+            }
+          }
+
+          // Garante que a mensagem reflita a situação de falha
+          if (
+            resultMessage &&
+            !resultMessage.textContent.includes("falha") &&
+            !resultMessage.textContent.includes("erro") &&
+            !resultMessage.textContent.includes("problema")
+          ) {
+            resultMessage.textContent =
+              "Ocorreram erros durante o processamento dos leads.";
+          }
+
+          // Certifica-se de que a seção de falhas está visível
+          if (failedSection) {
+            failedSection.style.display = "block";
+          }
+        } else if (leadCount > 0) {
+          // Sucesso total ou parcial (pelo menos alguns leads importados)
           console.log(`Leads importados: ${leadCount}`);
 
           // Força a exibição como sucesso se há leads importados
@@ -46,6 +146,16 @@ document.addEventListener("DOMContentLoaded", function () {
             const titleElement = errorIcon.nextElementSibling;
             if (titleElement && titleElement.tagName === "H2") {
               titleElement.textContent = "Processamento Concluído!";
+            }
+          }
+
+          // Atualiza mensagem se há sucesso e falhas
+          if (failCount > 0 && resultMessage) {
+            if (
+              !resultMessage.textContent.includes("parcial") &&
+              !resultMessage.textContent.includes("alguns")
+            ) {
+              resultMessage.textContent = `Processamento concluído com sucesso parcial: ${leadCount} leads importados e ${failCount} falhas.`;
             }
           }
         }
